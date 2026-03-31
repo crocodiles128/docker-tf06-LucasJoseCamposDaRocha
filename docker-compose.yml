@@ -1,0 +1,28 @@
+version: '3.9'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    image: tf-is-aula-web:latest
+    restart: unless-stopped
+    depends_on:
+      - cache
+    command: sh -c "while true; do sleep 3600; done"
+    networks:
+      - appnet
+
+  cache:
+    image: redis:alpine
+    restart: unless-stopped
+    volumes:
+      - redis_data:/data
+    networks:
+      - appnet
+
+volumes:
+  redis_data:
+
+networks:
+  appnet:
+    driver: bridge
